@@ -46,3 +46,16 @@ Options:
 3) List all entries in the file.
 4) Corrupts value in the position.
 5) Quits the program
+
+## Memory leak checks
+Valgrind output (`valgrind --leak-check=yes ./NT_Task`):
+```
+==10577== HEAP SUMMARY:
+==10577==     in use at exit: 0 bytes in 0 blocks
+==10577==   total heap usage: 448 allocs, 448 frees, 247,238 bytes allocated
+==10577== 
+==10577== All heap blocks were freed -- no leaks are possible
+==10577== 
+==10577== For lists of detected and suppressed errors, rerun with: -s
+==10577== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
