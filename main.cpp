@@ -7,22 +7,66 @@ int main()
 {
     SmartStorage storage(std::make_unique<Database>());
 
-    storage.write("key1", "value1");
-    storage.write("key2", "value2");
-
-    auto v1 = storage.read("key1");
-    auto v2 = storage.read("key2");
-    std::cout << "V1: " << v1 << " V2: " << v2 << std::endl;
-
-    storage.corruptor("key1", "CORRUPTION");
-    try
+    int choice;
+    int key = 1;
+    do 
     {
-        auto vx = storage.read("key1");
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
+        std::cout << "Options:\n";
+        std::cout << "1) Write\n";
+        std::cout << "2) Read\n";
+        std::cout << "3) Corrupt\n"; 
+        std::cout << "4) Quit\n";
+        std::cout << "--------------" << std::endl;
+        std::cin >> choice;
+
+        switch (choice)
+        {
+            case 1:
+            {
+                std::string txt;
+                std::cout << "Enter text:";
+                std::cin.ignore();
+                std::getline(std::cin, txt);
+
+                storage.write(key, txt);
+                std::cout << "Text:\"" << txt << "\" is saved on position " << key << std::endl;
+                key++;
+            }
+            break;
+            case 2:
+            {
+                int row;
+                std::cout << "Enter row to be read:";
+                std::cin >> row;
+
+                try
+                {
+                    std::cout << storage.read(row) << std::endl;
+                }
+                catch(const std::exception& e)
+                {
+                    
+                    std::cerr << "Error: " << e.what() << std::endl;
+                }
+            }
+            break;
+            case 3:
+            {
+                int row;
+                std::cout << "Which row to corrupt:";
+                std::cin >> row;
+                storage.corruptor(row, "CoRRuPtiiiiNg");
+            }
+            break;
+            case 4:
+            {
+                std::cout << "Exiting..." << std::endl;
+            }
+            break;
+            default:
+                std::cerr << "Non valid option selected" << std::endl;
+        }
+    } while(4 != choice);
     
     return 0;
 }
