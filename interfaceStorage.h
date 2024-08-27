@@ -2,6 +2,10 @@
 
 #include <string>
 
+/**
+ * @brief Interface for storages.
+ * 
+ */
 class InterfaceStorage
 {
 public:
