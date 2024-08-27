@@ -48,6 +48,23 @@ public:
     void corruptor(int const& key, std::string const& value);
 
 private:
+
+    /**
+     * @brief Hashing algorithm.
+     * 
+     * @param data Input data.
+     * @return size_t hash.
+     */
+    size_t checksum(std::string const& data);
+
+    /**
+     * @brief Validates data from the file.
+     * 
+     * @param data to be verified.
+     * @return std::string Returns string without checksum.
+     */
+    std::string validateData(std::string& data);
+
     std::mutex m_mtx;
     std::unique_ptr<InterfaceStorage> m_storage;
 };

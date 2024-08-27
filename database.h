@@ -54,14 +54,6 @@ private:
      */
     void createTable();
 
-    /**
-     * @brief Hashing algorithm.
-     * 
-     * @param data Input data.
-     * @return size_t hash.
-     */
-    size_t checksum(std::string const& data);
-
     std::string const m_dbPath = "Storage.db";
     sqlite3* m_db;
 };
