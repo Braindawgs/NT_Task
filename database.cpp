@@ -19,7 +19,7 @@ Database::~Database()
 void Database::createTable()
 {
     const char* sql = "CREATE TABLE IF NOT EXISTS storage ("
-                      "key TEXT PRIMARY KEY, "
+                      "key INTEGER PRIMARY KEY, "
                       "value TEXT NOT NULL, "
                       "checksum TEXT NOT NULL);";
 
@@ -36,7 +36,7 @@ size_t Database::checksum(std::string const& data)
     return std::hash<std::string>{}(data);
 }
 
-void Database::write(std::string const& key, std::string const& value)
+void Database::write(int const& key, std::string const& value)
 {
     size_t csum = checksum(value);
     sqlite3_stmt* stmt;
@@ -47,7 +47,7 @@ void Database::write(std::string const& key, std::string const& value)
         throw std::runtime_error("Write OP: Failed to prepare statement");
     }
 
-    sqlite3_bind_text(stmt, 1, key.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 1, key);
     sqlite3_bind_text(stmt, 2, value.c_str(), -1, SQLITE_STATIC);
     sqlite3_bind_int64(stmt, 3, static_cast<sqlite3_int64>(csum));
 
@@ -60,7 +60,7 @@ void Database::write(std::string const& key, std::string const& value)
     sqlite3_finalize(stmt);
 }
 
-std::string Database::read(std::string const& key)
+std::string Database::read(int const& key)
 {
     sqlite3_stmt* stmt;
     const char* sql = "SELECT value, checksum FROM storage WHERE key = ?;";
@@ -70,7 +70,7 @@ std::string Database::read(std::string const& key)
         throw std::runtime_error("Read OP: Failed to prepare statement");
     }
 
-    sqlite3_bind_text(stmt, 1, key.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 1, key);
 
     std::string value;
     size_t csum;
@@ -97,7 +97,7 @@ std::string Database::read(std::string const& key)
 }
 
 
-void Database::corruptor(std::string const& key, std::string const& value)
+void Database::corruptor(int const& key, std::string const& value)
 {
     
     sqlite3_stmt* stmt;
@@ -108,7 +108,7 @@ void Database::corruptor(std::string const& key, std::string const& value)
         throw std::runtime_error("Write OP: Failed to prepare statement");
     }
 
-    sqlite3_bind_text(stmt, 1, key.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 1, key);
     sqlite3_bind_text(stmt, 2, value.c_str(), -1, SQLITE_STATIC);
     sqlite3_bind_int64(stmt, 3, static_cast<sqlite3_int64>(12345));
 

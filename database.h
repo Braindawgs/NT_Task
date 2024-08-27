@@ -12,10 +12,10 @@ public:
     Database();
     ~Database();
 
-    void write(std::string const& key, std::string const& value) override;
-    std::string read(std::string const& key) override;
+    void write(int const& key, std::string const& value) override;
+    std::string read(int const& key) override;
 
-    void corruptor(std::string const& key, std::string const& value);
+    void corruptor(int const& key, std::string const& value);
 
 private:
     void createTable();

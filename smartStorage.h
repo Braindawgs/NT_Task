@@ -13,10 +13,10 @@ public:
     SmartStorage(std::unique_ptr<InterfaceStorage> storage) : m_storage(std::move(storage)) {};
     ~SmartStorage() = default;
 
-    void write(std::string const& key, std::string const& val);
-    std::string read(std::string const& key);
+    void write(int const& key, std::string const& val);
+    std::string read(int const& key);
 
-    void corruptor(std::string const& key, std::string const& value);
+    void corruptor(int const& key, std::string const& value);
 
 private:
     std::mutex m_mtx;
