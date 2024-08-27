@@ -14,8 +14,9 @@ int main()
         std::cout << "Options:\n";
         std::cout << "1) Write\n";
         std::cout << "2) Read\n";
-        std::cout << "3) Corrupt\n"; 
-        std::cout << "4) Quit\n";
+        std::cout << "3) List all entries\n";
+        std::cout << "4) Corrupt\n"; 
+        std::cout << "5) Quit\n";
         std::cout << "--------------" << std::endl;
         std::cin >> choice;
 
@@ -52,13 +53,18 @@ int main()
             break;
             case 3:
             {
+                storage.listAll();
+            }
+            break;
+            case 4:
+            {
                 int row;
                 std::cout << "Which row to corrupt:";
                 std::cin >> row;
                 storage.corruptor(row, "CoRRuPtiiiiNg");
             }
             break;
-            case 4:
+            case 5:
             {
                 std::cout << "Exiting..." << std::endl;
             }
@@ -66,7 +72,7 @@ int main()
             default:
                 std::cerr << "Non valid option selected" << std::endl;
         }
-    } while(4 != choice);
+    } while(5 != choice);
     
     return 0;
 }

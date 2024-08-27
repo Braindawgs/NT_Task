@@ -15,6 +15,7 @@ public:
 
     void write(int const& key, std::string const& val);
     std::string read(int const& key);
+    void listAll();
 
     void corruptor(int const& key, std::string const& value);
 

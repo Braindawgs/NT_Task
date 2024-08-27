@@ -96,6 +96,35 @@ std::string Database::read(int const& key)
     return value;
 }
 
+void Database::listAll()
+{
+    sqlite3_stmt* stmt;
+    const char* sql = "SELECT key, value, checksum FROM storage;";
+
+    if (SQLITE_OK != sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr)) 
+    {
+        throw std::runtime_error("List OP: Failed to prepare statement");
+    }
+
+    std::cout << "Listing entries:" << std::endl;
+    while (SQLITE_ROW == sqlite3_step(stmt)) 
+    {
+        int key = sqlite3_column_int(stmt, 0);
+        const char* value = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        size_t csum = static_cast<size_t>(sqlite3_column_int64(stmt, 2));
+
+        if (csum == checksum(value))
+        {
+            std::cout << "Key: " << key << ", Value: " << value << std::endl;
+        }
+        else
+        {
+            std::cout << "Key: " << key << " is corrpted!" << std::endl;
+        }
+    }
+
+    sqlite3_finalize(stmt);
+}
 
 void Database::corruptor(int const& key, std::string const& value)
 {

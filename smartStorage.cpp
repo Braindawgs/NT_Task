@@ -12,6 +12,12 @@ std::string SmartStorage::read(int const& key)
     return m_storage->read(key);
 }
 
+void SmartStorage::listAll()
+{
+    std::lock_guard<std::mutex> lock(m_mtx); 
+    return m_storage->listAll();
+}
+
 void SmartStorage::corruptor(int const& key, std::string const& value)
 {
     std::lock_guard<std::mutex> lock(m_mtx); 

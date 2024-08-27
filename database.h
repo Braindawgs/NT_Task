@@ -14,6 +14,7 @@ public:
 
     void write(int const& key, std::string const& value) override;
     std::string read(int const& key) override;
+    void listAll() override;
 
     void corruptor(int const& key, std::string const& value);
 
