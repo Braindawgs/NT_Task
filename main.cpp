@@ -11,6 +11,7 @@ int main()
     int key = 1;
     do 
     {
+        std::cout << "--------------" << std::endl;
         std::cout << "Options:\n";
         std::cout << "1) Write\n";
         std::cout << "2) Read\n";
@@ -19,6 +20,13 @@ int main()
         std::cout << "5) Quit\n";
         std::cout << "--------------" << std::endl;
         std::cin >> choice;
+
+        // Error safety
+        if (std::cin.fail())
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
 
         switch (choice)
         {
