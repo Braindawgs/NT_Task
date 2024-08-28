@@ -47,6 +47,82 @@ Options:
 4) Corrupts value in the position.
 5) Quits the program
 
+<details>
+<summary>Example</summary>
+
+```
+Options:
+1) Write
+2) Read
+3) List all entries
+4) Corrupt
+5) Quit
+--------------
+1
+Enter text:First line              
+Text:"First line" is saved on position 1
+--------------
+Options:
+1) Write
+2) Read
+3) List all entries
+4) Corrupt
+5) Quit
+--------------
+1
+Enter text:Second line
+Text:"Second line" is saved on position 2
+--------------
+Options:
+1) Write
+2) Read
+3) List all entries
+4) Corrupt
+5) Quit
+--------------
+3
+Listing entries:
+Key: 1, Value: First line:12121062197758380058
+Key: 2, Value: Second line:5112499109616018711
+```
+
+Corruption added
+```
+Options:
+1) Write
+2) Read
+3) List all entries
+4) Corrupt
+5) Quit
+--------------
+4
+Which row to corrupt:1
+--------------
+Options:
+1) Write
+2) Read
+3) List all entries
+4) Corrupt
+5) Quit
+--------------
+3
+Listing entries:
+Key: 1, Value: CoRRuPtiiiiNg
+Key: 2, Value: Second line:5112499109616018711
+--------------
+Options:
+1) Write
+2) Read
+3) List all entries
+4) Corrupt
+5) Quit
+--------------
+2
+Enter row to be read:1
+Error: Corruption: checksum missing
+```
+</details>
+
 ## Memory leak checks
 Valgrind output (`valgrind --leak-check=yes ./NT_Task`):
 ```
