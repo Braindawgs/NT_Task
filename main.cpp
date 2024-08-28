@@ -2,6 +2,28 @@
 #include "database.h"
 
 #include <iostream>
+#include <sstream>
+#include <algorithm>
+
+/**
+ * @brief Checks if the string contains only numbers.
+ * 
+ * @param str User input string.
+ * @return int Number representation, otherwise error -1.
+ */
+int isValidNumber(std::string const& str) 
+{
+    int choice = -1;
+    bool is_ok = (!str.empty() && std::all_of(str.begin(), str.end(), ::isdigit));
+
+    if (is_ok)
+    {
+        std::stringstream ss(str);
+        ss >> choice;
+    }
+
+    return choice;
+}
 
 int main()
 {
@@ -20,8 +42,10 @@ int main()
 
     try
     {
-        int choice;
         int key = 1;
+        int choice = -1;
+        std::string line;
+
         do 
         {
             std::cout << "--------------" << std::endl;
@@ -32,14 +56,9 @@ int main()
             std::cout << "4) Corrupt\n"; 
             std::cout << "5) Quit\n";
             std::cout << "--------------" << std::endl;
-            std::cin >> choice;
 
-            // Error safety
-            if (std::cin.fail() || (choice < 1) || (choice > 5))
-            {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            }
+            std::getline(std::cin, line);
+            choice = isValidNumber(line);
 
             switch (choice)
             {
@@ -47,7 +66,6 @@ int main()
                 {
                     std::string txt;
                     std::cout << "Enter text:";
-                    std::cin.ignore();
                     std::getline(std::cin, txt);
 
                     storage->write(key, txt);
@@ -57,9 +75,9 @@ int main()
                 break;
                 case 2:
                 {
-                    int row;
-                    std::cout << "Enter row to be read:";
-                    std::cin >> row;
+                    std::string crow;
+                    std::getline(std::cin, crow);
+                    int row = isValidNumber(crow);
 
                     try
                     {
@@ -79,9 +97,12 @@ int main()
                 break;
                 case 4:
                 {
-                    int row;
                     std::cout << "Which row to corrupt:";
-                    std::cin >> row;
+
+                    std::string crow;
+                    std::getline(std::cin, crow);
+                    int row = isValidNumber(crow);
+
                     storage->corruptor(row, "CoRRuPtiiiiNg:!11!230###21");
                 }
                 break;
