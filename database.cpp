@@ -37,16 +37,22 @@ void Database::write(int const& key, std::string const& value)
 
     if (SQLITE_OK != sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr)) 
     {
-        throw std::runtime_error("Write OP: Failed to prepare statement");
+        throwAndFinalize(stmt, "Write OP: Failed to prepare statement");
     }
 
-    sqlite3_bind_int(stmt, 1, key);
-    sqlite3_bind_text(stmt, 2, value.c_str(), -1, SQLITE_STATIC);
+    if (SQLITE_OK != sqlite3_bind_int(stmt, 1, key))
+    {
+        throwAndFinalize(stmt, "Write OP: Failed to bind key");
+    }
+
+    if (SQLITE_OK != sqlite3_bind_text(stmt, 2, value.c_str(), -1, SQLITE_STATIC))
+    {
+        throwAndFinalize(stmt, "Write OP: Failed to bind value");
+    }
 
     if (SQLITE_DONE != sqlite3_step(stmt)) 
     {
-        sqlite3_finalize(stmt);
-        throw std::runtime_error("Failed to execute statement");
+        throwAndFinalize(stmt, "Failed to execute statement");
     }
 
     sqlite3_finalize(stmt);
@@ -59,10 +65,14 @@ std::string Database::read(int const& key)
 
     if (SQLITE_OK != sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr)) 
     {
+        sqlite3_finalize(stmt);
         throw std::runtime_error("Read OP: Failed to prepare statement");
     }
 
-    sqlite3_bind_int(stmt, 1, key);
+    if (SQLITE_OK != sqlite3_bind_int(stmt, 1, key))
+    {
+        throwAndFinalize(stmt, "Read OP: Failed to bind key");
+    }
 
     std::string value;
 
@@ -72,8 +82,7 @@ std::string Database::read(int const& key)
     } 
     else
     {
-        sqlite3_finalize(stmt);
-        throw std::runtime_error("Key not found");
+        throwAndFinalize(stmt, "Read OP: Key not found");
     }
 
     sqlite3_finalize(stmt);
@@ -88,6 +97,7 @@ void Database::listAll()
 
     if (SQLITE_OK != sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr)) 
     {
+        sqlite3_finalize(stmt);
         throw std::runtime_error("List OP: Failed to prepare statement");
     }
 
@@ -111,6 +121,7 @@ void Database::corruptor(int const& key, std::string const& value)
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) 
     {
+        sqlite3_finalize(stmt);
         throw std::runtime_error("Write OP: Failed to prepare statement");
     }
 

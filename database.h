@@ -54,6 +54,16 @@ private:
      */
     void createTable();
 
+    /**
+     * @brief Throws and finalizes sql stmt.
+     * @note  No need to check validity of stmt ptr:
+     * Invoking sqlite3_finalize() on a NULL pointer is a harmless no-op.
+     * https://www.sqlite.org/c3ref/finalize.html
+     * 
+     * @param stmt SQL statement.
+     */
+    void throwAndFinalize(sqlite3_stmt* stmt, std::string const& err);
+
     std::string const m_dbPath = "Storage.db";
     sqlite3* m_db;
 };
