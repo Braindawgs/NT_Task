@@ -113,26 +113,8 @@ void Database::listAll()
     sqlite3_finalize(stmt);
 }
 
-void Database::corruptor(int const& key, std::string const& value)
+void Database::throwAndFinalize(sqlite3_stmt* stmt, std::string const& err)
 {
-    
-    sqlite3_stmt* stmt;
-    const char* sql = "REPLACE INTO storage (key, value) VALUES (?, ?);";
-
-    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) 
-    {
-        sqlite3_finalize(stmt);
-        throw std::runtime_error("Write OP: Failed to prepare statement");
-    }
-
-    sqlite3_bind_int(stmt, 1, key);
-    sqlite3_bind_text(stmt, 2, value.c_str(), -1, SQLITE_STATIC);
-
-    if (SQLITE_DONE != sqlite3_step(stmt)) 
-    {
-        sqlite3_finalize(stmt);
-        throw std::runtime_error("Failed to execute statement");
-    }
-
     sqlite3_finalize(stmt);
+    throw std::runtime_error(err);
 }

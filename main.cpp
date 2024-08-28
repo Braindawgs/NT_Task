@@ -69,7 +69,7 @@ int main()
                 int row;
                 std::cout << "Which row to corrupt:";
                 std::cin >> row;
-                storage.corruptor(row, "CoRRuPtiiiiNg");
+                storage.corruptor(row, "CoRRuPtiiiiNg:!11!230###21");
             }
             break;
             case 5:

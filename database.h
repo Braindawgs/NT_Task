@@ -38,14 +38,6 @@ public:
      */
     void listAll() override;
 
-    /**
-     * @brief Dummy function that "corrupts" specific part of the db. 
-     * 
-     * @param key identifier in database.
-     * @param value value to be written.
-     */
-    void corruptor(int const& key, std::string const& value);
-
 private:
 
     /**
